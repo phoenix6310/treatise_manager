@@ -11,13 +11,17 @@ module.exports = {
   disableHostCheck: true,
   open: true,
   port: 9527,
-  host: '172.18.84.35',
+  host: '192.168.0.105',
   proxy: {
    'api': {
-    target: 'http://172.18.84.42:7006',
+    // target: 'http://172.18.84.42:7006',
+    target: 'http://f3176v6414.zicp.vip',
     pathRewrite: {
      '^/api': '',
      changeOrigin: true
+    },
+    headers: {
+        Host: 'f3176v6414.zicp.vip'
     }
    }
   }
