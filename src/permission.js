@@ -10,7 +10,6 @@ const whiteList = ['/login', '/auth-redirect']
 
 router.beforeEach(async (to, from, next) => {
     NProgress.start()
-
     const hasToken = getToken()
     if (hasToken) {
         if (to.path === '/login') {
@@ -18,13 +17,22 @@ router.beforeEach(async (to, from, next) => {
             NProgress.done()
         } else {
             const hasRoles = store.getters.roles && store.getters.roles.length > 0
+            console.log(store.getters.roles)
+
             if (hasRoles) {
                 next()
-              } else {
+                NProgress.done()
+            } else {
                 try {
-                    const { roles } = await store.dispatch('user/getInfo')
+                    const {userType} = await store.dispatch('GetInfo')
+                    store.dispatch('GenerateRoutes', { roles: [userType] }).then(() => { // 根据roles权限生成可访问的路由表
+                        router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+                        next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+                      })
+                } catch (err) {
+                    console.log(err)
                 }
-              }
+            }
         }
     } else {
         if (whiteList.indexOf(to.path) !== -1) {

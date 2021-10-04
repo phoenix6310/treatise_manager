@@ -3,7 +3,6 @@
     <el-menu
       :show-timeout="200"
       :default-active="$route.path"
-      :collapse="isCollapse"
       :background-color="variables.menuBg"
       :text-color="variables.menuText"
       :active-text-color="variables.menuActiveText"
@@ -34,9 +33,6 @@ export default {
     },
     variables() {
       return variables
-    },
-    isCollapse() {
-      return !this.sidebar.opened
     }
   },
   methods: {

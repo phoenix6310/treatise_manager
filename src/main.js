@@ -11,6 +11,8 @@ import '@/styles/index.scss'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
+import './permission' // permission control
+
 Vue.use(ElementUI);
 new Vue({
   router,

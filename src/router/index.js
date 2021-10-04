@@ -12,17 +12,13 @@ import Layout from '../layout'
 
 /*
  *角色  role
- *超级管理员       0
- *管理员（全国）   4
- *省级管理员       1
- *院管理员         2
- *教师             3
+ *超级管理员       10001
  */
 export const constantRouterMap = [{
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  }
+  path: '/login',
+  component: () => import('@/views/login/index'),
+  hidden: true
+}
 ]
 
 export default new Router({
@@ -34,25 +30,71 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-
-  // {
-  //   path: '/question',
-  //   component: Layout,
-  //   redirect: '/question/questionBank',
-  //   name: 'question',
-  //   meta: {
-  //     title: '题库管理',
-  //     icon: 'question-manager',
-  //     roles: [0, 1, 2, 4]
-  //   },
-  //   children: [{
-  //     path: 'questionBank',
-  //     component: () => import('@/views/questionManager/questionBank'),
-  //     name: 'questionBank',
-  //     meta: {
-  //       title: '试题库',
-  //       keepAlive: true
-  //     }
-  //   }]
-  // },
+  {
+    path: '/',
+    redirect: '/competition',
+    name: 'index',
+    hidden: true
+  },
+  {
+    path: '/competition',
+    component: Layout,
+    name: 'competition',
+    redirect: '/competition/create',
+    meta: {
+      title: '竞赛',
+      roles: [10001]
+    },
+    children: [{
+      path: '/competition/create',
+      component: () => import('@/views/competition/create'),
+      name: 'createCompetion',
+      meta: {
+        title: '创建竞赛',
+      }
+    }, {
+      path: '/competition/manage',
+      component: () => import('@/views/competition/manage'),
+      name: 'createCompetion',
+      meta: {
+        title: '竞赛管理',
+      }
+    }]
+  },
+  {
+    path: '/account',
+    component: Layout,
+    name: 'account',
+    redirect: '/account/participant',
+    meta: {
+      title: '人员管理',
+      roles: [10001]
+    },
+    children: [{
+      path: '/account/participant',
+      component: () => import('@/views/account/participant'),
+      name: 'participant',
+      meta: {
+        title: '选手信息',
+      }
+    }, {
+      path: '/account/reviewer',
+      component: () => import('@/views/account/reviewer'),
+      name: 'reviewer',
+      meta: {
+        title: '评审信息',
+      }
+    }, {
+      path: '/account/manager',
+      component: () => import('@/views/account/manager'),
+      name: 'manager',
+      meta: {
+        title: '管理员信息',
+      }
+    }]
+  }, {
+    path: '/404',
+    component: () => import('@/views/error-page/404'),
+    hidden: true
+  }, { path: '*', redirect: '/404', hidden: true }
 ]

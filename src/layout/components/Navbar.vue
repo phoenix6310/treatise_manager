@@ -1,10 +1,6 @@
 <template>
   <div class="navbar">
-    
     <div class="head-right">
-      <div class="show-user-name" v-if='name' @click="toModifyPage">
-        <div class="user-name">{{ name }}</div>
-      </div>
       <div class="user-log-out" v-if='roles.length'>
         <div class="user-log-out-btn" @click="logout">退出</div>
       </div>
@@ -20,23 +16,14 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["user", "sidebar", "name", "roles"])
+    ...mapGetters(["roles"])
   },
   methods: {
-    toggleSideBar() {
-      this.$store.dispatch("ToggleSideBar");
-    },
     logout() {
       this.$store.dispatch("LogOut").then(() => {
         location.reload(); // 为了重新实例化vue-router对象 避免bug
       });
     },
-    toModifyPage(){
-      this.$router.push('/account/accountMessage')
-    },
-    toSignForCompetionPage(){
-      this.$router.push('/account/signForCompetion')
-    }
   }
 };
 </script>

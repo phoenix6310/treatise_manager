@@ -1,7 +1,6 @@
 <template>
-  <div class="ocw-sidebar-item" :class="[sidebar.opened?'ocw-open-sidebar':'ocw-hide-sidebar']">
+  <div class="ocw-sidebar-item">
     <div class="ocw-item-wrap">
-      <span class="item-icon" :class="[`item-icon-${meta.icon}`]"></span>
       <span slot="title" class="item-title">{{meta.title}}</span>
     </div>
   </div>

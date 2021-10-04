@@ -17,8 +17,8 @@
         <el-form-item label="账号" prop="account">
           <el-input v-model="loginForm.account"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="pwd">
-          <el-input v-model="loginForm.pwd"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="loginForm.password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('loginForm')"
@@ -36,13 +36,13 @@ export default {
     return {
       loginForm: {
         account: "",
-        pwd: "",
+        password: "",
       },
       rules: {
         account: [
           { required: true, message: "请输入账号", trigger: "blur" },
         ],
-        pwd: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
     };
   },
@@ -51,14 +51,16 @@ export default {
       console.log(this.$refs[formName]);
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          let loginForm = {
-            account: this.loginForm.account.trim(),
-            pwd: this.loginForm.pwd,
-          };
-          console.log(loginForm);
+          const formData = new FormData();
+          formData.append('account', this.loginForm.account.trim())
+          formData.append('password', this.loginForm.password)
 
-          let res = await this.$store.dispatch("Login", loginForm);
-          console.log(res);
+          this.$store.dispatch("Login", formData).then(()=>{
+            // 登录成功
+            this.$router.push('/')
+          }).catch((err)=>{
+            console.log(err)
+          })
         } else {
           console.log("error submit!!");
           return false;

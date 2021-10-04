@@ -5,6 +5,7 @@ const user = {
     state: {
         token: getToken(),
         roles: [],
+        userData: {}
     },
     mutations: {
         SET_TOKEN: (state, token) => {
@@ -13,14 +14,18 @@ const user = {
         SET_ROLES: (state, roles) => {
             state.roles = roles
         },
+        SET_USERDATA: (state, userData) => {
+            state.userData = userData
+        }
     },
     actions: {
         Login({ commit }, formData) {
             return new Promise((resolve, reject) => {
                 login(formData).then(response => {
-                    const data = response.data
-                    setToken(data)
-                    commit('SET_TOKEN', data)
+                    const token = response.data['diss-token']
+                    console.log(token)
+                    setToken(token)
+                    commit('SET_TOKEN', token)
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -29,8 +34,11 @@ const user = {
         },
         GetInfo({ commit, state }) {
             return new Promise(async (resolve, reject) => {
-                let res = await getInfo()
-                console.log(res, 'GetInfo')
+                let { data: userData } = await getInfo()
+                console.log(userData, 'GetInfo')
+                commit('SET_ROLES', [userData.userType])
+                commit('SET_USERDATA', userData)
+                resolve(userData)
             })
         }
     }

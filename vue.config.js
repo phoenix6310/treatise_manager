@@ -20,9 +20,9 @@ module.exports = {
      '^/api': '',
      changeOrigin: true
     },
-    headers: {
-        Host: 'f3176v6414.zicp.vip'
-    }
+    // headers: {
+    //     Host: 'f3176v6414.zicp.vip'
+    // }
    }
   }
  },
@@ -37,13 +37,13 @@ module.exports = {
    }
   },
   plugins: [
-   new UglifyJsPlugin({
-    uglifyOptions: {
-     compress: {
-      drop_console: true,
-     },
-    },
-   }),
+//    new UglifyJsPlugin({
+//     uglifyOptions: {
+//      compress: {
+//       drop_console: true,
+//      },
+//     },
+//    }),
   ],
  },
 }
