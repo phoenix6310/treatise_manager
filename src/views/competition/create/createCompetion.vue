@@ -361,6 +361,7 @@ export default {
           if (!this.isEdit) {
             res = await addCompetition(formData);
           } else {
+            formData.append("id", this.competitionId);
             res = await updateCompetition(formData);
           }
 
