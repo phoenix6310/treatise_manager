@@ -17,7 +17,7 @@ router.beforeEach(async (to, from, next) => {
             NProgress.done()
         } else {
             const hasRoles = store.getters.roles && store.getters.roles.length > 0
-            console.log(store.getters.roles)
+            // console.log(store.getters.roles)
 
             if (hasRoles) {
                 next()

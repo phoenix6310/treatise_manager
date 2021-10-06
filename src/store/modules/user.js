@@ -23,7 +23,7 @@ const user = {
             return new Promise((resolve, reject) => {
                 login(formData).then(response => {
                     const token = response.data['diss-token']
-                    console.log(token)
+                    // console.log(token)
                     setToken(token)
                     commit('SET_TOKEN', token)
                     resolve()
@@ -35,7 +35,7 @@ const user = {
         GetInfo({ commit, state }) {
             return new Promise(async (resolve, reject) => {
                 let { data: userData } = await getInfo()
-                console.log(userData, 'GetInfo')
+                // console.log(userData, 'GetInfo')
                 commit('SET_ROLES', [userData.userType])
                 commit('SET_USERDATA', userData)
                 resolve(userData)

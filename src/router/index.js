@@ -40,25 +40,45 @@ export const asyncRouterMap = [
     path: '/competition',
     component: Layout,
     name: 'competition',
-    redirect: '/competition/create',
+    redirect: '/competition/rules',
     meta: {
       title: '竞赛',
       roles: [10001]
     },
     children: [{
-      path: '/competition/create',
-      component: () => import('@/views/competition/create'),
-      name: 'createCompetion',
+      path: '/competition/rules',
+      component: () => import('@/views/competition/rules'),
+      name: 'rules',
       meta: {
-        title: '创建竞赛',
+        title: '评分标准',
       }
     }, {
-      path: '/competition/manage',
-      component: () => import('@/views/competition/manage'),
+      path: '/competition/createRule',
+      component: () => import('@/views/competition/rules/createRule'),
+      name: 'createRule',
+      hidden: true
+    }, {
+      path: '/competition/editRule/:id',
+      component: () => import('@/views/competition/rules/createRule'),
+      name: 'editRule',
+      hidden: true
+    }, {
+      path: '/competition/index',
+      component: () => import('@/views/competition/create'),
       name: 'createCompetion',
       meta: {
         title: '竞赛管理',
       }
+    }, {
+      path: '/competition/create',
+      component: () => import('@/views/competition/create/createCompetion'),
+      name: 'createCompetition',
+      hidden: true
+    }, {
+      path: '/competition/edit/:id',
+      component: () => import('@/views/competition/create/createCompetion'),
+      name: 'editCompetition',
+      hidden: true
     }]
   },
   {

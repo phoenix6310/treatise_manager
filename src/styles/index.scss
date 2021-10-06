@@ -5,3 +5,46 @@
 html, body{
     height: 100%;
 }
+
+.page-header{
+    margin-bottom: 10px;
+}
+.page-table {
+    .table_search_wrap{
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        .search_box_wrap{
+            display: flex;
+            .search_box{
+                display: flex;
+                align-items: center;
+                margin-right: 10px;
+                .search_title{
+                    margin-right: 6px;
+                }
+                .w100{
+                    width: 100px;
+                }
+                .w120{
+                    width: 120px;
+                }
+            }
+        }
+    }
+    .cell {
+        text-align: center;
+    }
+    .page-footer {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
