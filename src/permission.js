@@ -37,8 +37,10 @@ router.beforeEach(async (to, from, next) => {
     } else {
         if (whiteList.indexOf(to.path) !== -1) {
             next()
+            NProgress.done()
         } else {
-            next(`/login?redirect=${to.path}`)
+            // next(`/login?redirect=${to.path}`)
+            next(`/login`)
             NProgress.done()
         }
     }

@@ -123,7 +123,7 @@
           <template slot-scope="scope">
             <el-button size="mini" @click="edit(scope.row)">编辑</el-button>
 
-            <el-button size="mini" @click="edit(scope.row)" type="warning"
+            <el-button size="mini" @click="resetPWD(scope.row)" type="warning"
               >重置密码</el-button
             >
           </template>
@@ -146,7 +146,7 @@
   </div>
 </template>
 <script>
-import { getAdminList } from "@/api/account";
+import { getAdminList, resetAdminPWD } from "@/api/account";
 import { getOrgs } from "@/api/competition";
 import dayjs from "dayjs";
 export default {
@@ -322,6 +322,20 @@ export default {
         path: `/manager/edit/${rowData.userId}`,
       });
       console.log(rowData);
+    },
+    async resetPWD(rowData){
+      let data = {
+        userId: rowData.userId
+      }
+      let res = await resetAdminPWD(data)
+      console.log(res)
+      if (res && res.code === 1) {
+        this.$message({
+          type: "success",
+          message: "已重置",
+          duration: 3000,
+        });
+      }
     },
     async del(rowData) {
       console.log(rowData);

@@ -73,12 +73,13 @@ export default {
 
 <style lang="scss" scoped>
 .login_wrap {
-  height: 100%;
+  // height: 80%;
   display: flex;
-  align-items: center;
+  // align-items: flex-start;
   justify-content: center;
+  padding-top: 10%;
   .title_wrap {
-    margin-top: -20%;
+    margin-top: 80px;
     margin-right: 10%;
     .title_cn {
       font-size: 24px;
@@ -90,9 +91,9 @@ export default {
   }
 
   .form_wrap {
-    margin-top: -20%;
+    max-width: 340px;
+    // margin-top: -20%;
     width: 30%;
-    max-width: 500px;
     min-width: 260px;
     border: 1px solid #dcdfe6;
     padding: 20px 40px 20px 20px;

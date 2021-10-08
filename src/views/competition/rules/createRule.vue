@@ -37,7 +37,7 @@
                 ></el-input>
               </div>
               <div class="rule_item_total_score">
-                {{ ruleScoreItem[index] }}分
+                总分：{{ ruleScoreItem[index] }}分
               </div>
               <div class="rule_control_wrap">
                 <el-button
@@ -315,6 +315,7 @@ export default {
               message: res.message,
               duration: 3000,
             });
+            this.isUpload = false;
           }
         } else {
           console.log("error submit!!");

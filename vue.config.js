@@ -26,11 +26,11 @@ module.exports = {
     host: '192.168.0.105',
     host: '172.18.84.35',
     proxy: {
-      'api': {
+      'treatise_manager': {
         // target: 'http://172.18.84.42:7006',
         target: 'http://f3176v6414.zicp.vip',
         pathRewrite: {
-          '^/api': '',
+          '^/treatise_manager': '',
           changeOrigin: true
         },
         // headers: {

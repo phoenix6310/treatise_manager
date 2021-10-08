@@ -102,7 +102,7 @@
         <el-table-column prop="collegeName" label="院校"></el-table-column>
         <el-table-column prop="proviceName" label="竞赛地区"></el-table-column>
         <template v-if="type === 2">
-          <el-table-column prop="score" label="分数"></el-table-column>
+          <el-table-column prop="_score" label="分数"></el-table-column>
           <el-table-column
             prop="fileData"
             label="视频名称"
@@ -115,7 +115,7 @@
         <template v-else>
           <el-table-column prop="fileData" label="论文"></el-table-column>
           <el-table-column prop="checkName" label="查重文件"></el-table-column>
-          <el-table-column prop="score" label="分数"></el-table-column>
+          <el-table-column prop="_score" label="分数"></el-table-column>
         </template>
         <el-table-column label="操作" width="160">
           <template slot-scope="scope">
@@ -261,6 +261,9 @@ export default {
           let itemInfo = {
             ...competitionItem,
           };
+          if(itemInfo.score===-255){
+            itemInfo._score = ''
+          }
           switch (itemInfo.type) {
             case 1:
               itemInfo.typeStr = "主观题答辩";

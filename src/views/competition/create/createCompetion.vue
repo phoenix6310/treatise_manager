@@ -253,8 +253,8 @@ export default {
     this.provinceOptions = provinceOptions;
     let ruleOptions = [];
     let params = {
-      pageSize: 1,
-      pageNum: 100000,
+      pageSize: 100000,
+      pageNum: 1,
       columnFilters: {
         "~name": "",
       },
@@ -316,11 +316,11 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           this.isUpload = true;
-          console.log(this.competitionForm);
-          console.log(
-            this.$refs["contestantsInfo"].files[0],
-            this.$refs["reviewers"].files[0]
-          );
+          // console.log(this.competitionForm);
+          // console.log(
+          //   this.$refs["contestantsInfo"].files[0],
+          //   this.$refs["reviewers"].files[0]
+          // );
           let formData = new FormData();
           for (var key in this.competitionForm) {
             console.log(key, this.competitionForm[key]);
@@ -378,18 +378,22 @@ export default {
             this.$alert("导入信息出错，是否下载错误信息", "提示", {
               confirmButtonText: "下载",
               callback: () => {
-                window.open(`http://172.18.89.141:8888${res.data}`);
-                this.$router.push({
-                  path: "/competition/index",
-                });
+                if (res.data) {
+                  window.open(res.data);
+                  this.$router.push({
+                    path: "/competition/index",
+                  });
+                }
               },
             });
+            // this.isUpload = false;
           } else {
             this.$message({
               type: "error",
               message: res.message,
               duration: 3000,
             });
+            this.isUpload = false;
           }
         } else {
           console.log("error submit!!");

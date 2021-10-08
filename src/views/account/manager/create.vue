@@ -51,7 +51,7 @@
         <el-input v-model="managerForm.account"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('managerForm')"
+        <el-button type="primary" @click="submitForm('managerForm')" :disabled="isUpload"
           >{{ !isEdit ? "立即创建" : "确认修改" }}</el-button
         >
       </el-form-item>
@@ -135,6 +135,7 @@ export default {
       },
       userId: "",
       isEdit: false,
+      isUpload: false,
     };
   },
   async created() {
@@ -186,6 +187,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
+          this.isUpload = true;
           console.log(this.managerForm);
           let res = null;
           let data = {
@@ -224,6 +226,7 @@ export default {
               message: res.message,
               duration: 3000,
             });
+            this.isUpload = false;
           }
         } else {
           console.log("error submit!!");
