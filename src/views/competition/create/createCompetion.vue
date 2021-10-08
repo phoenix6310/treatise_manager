@@ -254,7 +254,7 @@ export default {
     let ruleOptions = [];
     let params = {
       pageSize: 1,
-      pageNo: 100000,
+      pageNum: 100000,
       columnFilters: {
         "~name": "",
       },

@@ -9,8 +9,16 @@
       <div class="table_search_wrap">
         <div class="search_box_wrap"></div>
         <div class="search_input_wrap">
-          <el-input placeholder="请输入评分标准名称" v-model="name" size="small">
-            <el-button slot="append" icon="el-icon-search" @click="updateTableData"></el-button>
+          <el-input
+            placeholder="请输入评分标准名称"
+            v-model="name"
+            size="small"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="updateTableData"
+            ></el-button>
           </el-input>
         </div>
       </div>
@@ -41,7 +49,6 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :page-sizes="[10, 20, 30, 40]"
-            :page-size="10"
             layout="total, sizes, prev, pager, next"
             :total="totalNum"
           ></el-pagination>
@@ -73,10 +80,9 @@ export default {
     },
     async updateTableData() {
       this.tableData = [];
-      this.totalNum = 0;
       let params = {
         pageSize: this.pageSize,
-        pageNo: this.pageNum,
+        pageNum: this.pageNum,
         columnFilters: {
           "~name": this.name,
         },
@@ -119,7 +125,7 @@ export default {
     handleCurrentChange(currentPage) {
       this.pageNum = currentPage;
       this.updateTableData();
-      // console.log(currentPage, 'handleCurrentChange')
+      // console.log(currentPage, "handleCurrentChange");
     },
     edit(rowData) {
       this.$router.push({

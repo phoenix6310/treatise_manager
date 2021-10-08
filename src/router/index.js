@@ -18,8 +18,7 @@ export const constantRouterMap = [{
   path: '/login',
   component: () => import('@/views/login/index'),
   hidden: true
-}
-]
+}]
 
 export default new Router({
   // mode: 'history', //后端支持可开
@@ -29,8 +28,7 @@ export default new Router({
   routes: constantRouterMap
 })
 
-export const asyncRouterMap = [
-  {
+export const asyncRouterMap = [{
     path: '/',
     redirect: '/competition',
     name: 'index',
@@ -111,10 +109,24 @@ export const asyncRouterMap = [
       meta: {
         title: '管理员信息',
       }
+    }, {
+      path: '/manager/create',
+      component: () => import('@/views/account/manager/create'),
+      name: 'createManager',
+      hidden: true
+    }, {
+      path: '/manager/edit/:userId',
+      component: () => import('@/views/account/manager/create'),
+      name: 'editManager',
+      hidden: true
     }]
   }, {
     path: '/404',
     component: () => import('@/views/error-page/404'),
     hidden: true
-  }, { path: '*', redirect: '/404', hidden: true }
+  }, {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
 ]

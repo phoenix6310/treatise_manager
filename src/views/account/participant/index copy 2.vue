@@ -1,31 +1,9 @@
 <template>
   <div class="participant_wrap">
-    <div class="page-header">
-      <el-button size="medium" type="primary" @click="add"
-        >新增管理员</el-button
-      >
-    </div>
     <div class="page-table">
       <div class="table_search_wrap">
         <div class="search_box_wrap">
           <div class="search_box">
-            <div class="search_title">管理员类型</div>
-            <el-select
-              v-model="managerType"
-              placeholder="请选择"
-              @change="managerTypeChange"
-              size="small"
-            >
-              <el-option
-                v-for="item in managerTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <!-- <div class="search_box">
             <div class="search_title">年份</div>
             <el-date-picker
               v-model="term"
@@ -92,10 +70,10 @@
               >
               </el-option>
             </el-select>
-          </div> -->
+          </div>
         </div>
         <div class="search_input_wrap">
-          <el-input placeholder="请输入姓名" v-model="name" size="small">
+          <el-input placeholder="请输入竞赛名称" v-model="name" size="small">
             <el-button
               slot="append"
               icon="el-icon-search"
@@ -112,20 +90,18 @@
       >
         <el-table-column type="index" width="50"> </el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
-        <el-table-column prop="account" label="账号"></el-table-column>
-        <el-table-column
-          prop="userTypeStr"
-          label="管理员类型"
-        ></el-table-column>
-        <el-table-column prop="proviceName" label="所属地区"></el-table-column>
-        <el-table-column prop="email" label="邮箱"></el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column prop="userNo" label="编号"></el-table-column>
+        <el-table-column prop="term" label="竞赛年份"></el-table-column>
+        <el-table-column prop="matchTypeStr" label="竞赛规模"></el-table-column>
+        <el-table-column prop="proviceName" label="竞赛地区"></el-table-column>
+        <el-table-column prop="proviceName" label="评审类型"></el-table-column>
+        <el-table-column label="操作" width="160">
           <template slot-scope="scope">
-            <el-button size="mini" @click="edit(scope.row)">编辑</el-button>
-
-            <el-button size="mini" @click="edit(scope.row)" type="warning"
-              >重置密码</el-button
+            <el-button size="mini" @click="edit(scope.row)" v-if="type === 1"
+              >上传</el-button
             >
+
+            <el-button size="mini" @click="edit(scope.row)">下载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -146,7 +122,7 @@
   </div>
 </template>
 <script>
-import { getAdminList } from "@/api/account";
+import { getReviewerList } from "@/api/account";
 import { getOrgs } from "@/api/competition";
 import dayjs from "dayjs";
 export default {
@@ -159,21 +135,6 @@ export default {
       name: "",
       term: "",
       type: 1,
-      managerType: "",
-      managerTypes: [
-        {
-          value: 9003,
-          label: "全国管理员",
-        },
-        {
-          value: 9002,
-          label: "省级管理员",
-        },
-        // {
-        //   value: 9001,
-        //   label: "校级级管理员",
-        // },
-      ],
       competitionTypes: [
         {
           value: 1,
@@ -224,39 +185,35 @@ export default {
     this.provinceOptions = provinceOptions;
   },
   methods: {
-    managerTypeChange() {
-      this.updateTableData();
-    },
-    add() {
-      this.$router.push({
-        path: "/manager/create",
-      });
-    },
     updateQuery() {
       this.updateTableData();
     },
     dateToISO(dataTime) {
       return dayjs(dataTime).format("YYYY-MM-DD HH:mm:ss");
     },
+    add() {
+      this.$router.push({
+        path: "/competition/create",
+      });
+    },
     async updateTableData() {
       this.tableData = [];
       let params = {
         pageSize: this.pageSize,
         pageNum: this.pageNum,
-        // sort: "",
+        sort: "",
         columnFilters: {
-          // term: this.term,
-          "~name": this.name,
-          // type: this.type,
-          // matchType: this.matchType,
-          // proviceId: this.proviceId,
-          // collegeId: "",
-          userType: this.managerType,
+          term: this.term,
+          "~name~userNo": this.name,
+          type: this.type,
+          matchType: this.matchType,
+          proviceId: this.proviceId,
+          collegeId: "",
         },
       };
 
       let list = [];
-      let res = await getAdminList(params);
+      let res = await getReviewerList(params);
       console.log(res);
       if (res.code === 1) {
         res.data.contents.map((competitionItem) => {
@@ -271,31 +228,17 @@ export default {
               itemInfo.typeStr = "优选视频";
               break;
           }
-          // 1:学生 ，2:微课老师，1001:评审人员，9001:校级管理员，9002:省级管理员，9003:全国管理员，10001:超级管理员
-          switch (itemInfo.userType) {
-            case 10001:
-              itemInfo.userTypeStr = "超级管理员";
-              break;
-            case 9003:
-              itemInfo.userTypeStr = "全国管理员";
-              break;
-            case 9002:
-              itemInfo.userTypeStr = "省级管理员";
-              break;
-            case 9001:
-              itemInfo.userTypeStr = "校级管理员";
-              break;
-            case 1001:
-              itemInfo.userTypeStr = "评审人员";
+          switch (itemInfo.dissData.matchType) {
+            case 1:
+              itemInfo.matchTypeStr = "国赛";
               break;
             case 2:
-              itemInfo.userTypeStr = "微课老师";
+              itemInfo.matchTypeStr = "省赛";
               break;
-            case 1:
-              itemInfo.userTypeStr = "学生";
+            case 3:
+              itemInfo.matchTypeStr = "校赛";
               break;
           }
-
           itemInfo.timePeriod = `${this.dateToISO(
             +itemInfo.startTime
           )}-${this.dateToISO(+itemInfo.endTime)}`;
@@ -317,9 +260,9 @@ export default {
       // console.log(currentPage, 'handleCurrentChange')
     },
     edit(rowData) {
-      sessionStorage.setItem("manageInfo", JSON.stringify(rowData));
+      sessionStorage.setItem("competitionInfo", JSON.stringify(rowData));
       this.$router.push({
-        path: `/manager/edit/${rowData.userId}`,
+        path: `/competition/edit/${rowData.id}`,
       });
       console.log(rowData);
     },

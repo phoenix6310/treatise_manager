@@ -15,12 +15,13 @@
               value-format="yyyy"
               size="small"
               class="w100"
+              @change="updateQuery"
             >
             </el-date-picker>
           </div>
           <div class="search_box">
             <div class="search_title">类型</div>
-            <el-select v-model="type" placeholder="请选择" size="small" class="w120">
+            <el-select v-model="type" placeholder="请选择" size="small" class="w120" @change="updateQuery">
               <el-option
                 v-for="item in competitionTypes"
                 :key="item.value"
@@ -32,7 +33,7 @@
           </div>
           <div class="search_box">
             <div class="search_title">规模</div>
-            <el-select v-model="matchType" placeholder="请选择" size="small" class="w120">
+            <el-select v-model="matchType" placeholder="请选择" size="small" class="w120" @change="updateQuery">
               <el-option
                 v-for="item in competitionScope"
                 :key="item.value"
@@ -143,6 +144,9 @@ export default {
     this.updateTableData();
   },
   methods: {
+    updateQuery() {
+      this.updateTableData();
+    },
     dateToISO(dataTime) {
       return dayjs(dataTime).format("YYYY-MM-DD HH:mm:ss");
     },
@@ -155,7 +159,7 @@ export default {
       this.tableData = [];
       let params = {
         pageSize: this.pageSize,
-        pageNo: this.pageNum,
+        pageNum: this.pageNum,
         sort: "",
         columnFilters: {
           term: this.term,

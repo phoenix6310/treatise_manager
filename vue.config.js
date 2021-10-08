@@ -24,6 +24,7 @@ module.exports = {
     open: true,
     port: 9527,
     host: '192.168.0.105',
+    host: '172.18.84.35',
     proxy: {
       'api': {
         // target: 'http://172.18.84.42:7006',

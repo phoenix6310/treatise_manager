@@ -65,7 +65,7 @@ export default {
       this.tableData = [];
       let params = {
         pageSize: this.pageSize,
-        pageNo: this.pageNum,
+        pageNum: this.pageNum,
       };
       let list = [];
       for (let i = 0; i < this.pageSize; i++) {
