@@ -28,7 +28,8 @@ module.exports = {
     proxy: {
       'treatise_manager': {
         // target: 'http://172.18.84.42:7006',
-        target: 'http://f3176v6414.zicp.vip',
+        target: 'http://172.18.84.81',
+        // target: 'http://f3176v6414.zicp.vip',
         pathRewrite: {
           '^/treatise_manager': '',
           changeOrigin: true
