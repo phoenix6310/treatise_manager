@@ -95,6 +95,14 @@ export const asyncRouterMap = [{
       meta: {
         title: '选手信息',
       }
+    },{
+      path: '/account/participant/edit/:id',
+      component: () => import('@/views/account/participant/edit'),
+      name: 'editParticipant',
+      hidden: true,
+      meta: {
+        title: '编辑选手信息',
+      }
     }, {
       path: '/account/reviewer',
       component: () => import('@/views/account/reviewer'),

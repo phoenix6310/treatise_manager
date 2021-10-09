@@ -55,3 +55,29 @@ export function resetAdminPWD(data) {
   data
  })
 }
+
+export function updateStudentInfo(data) {
+ return request({
+  url: '/treatise_manager/courseuser/dissertation/backend/admin/user/updateStudent',
+  method: 'post',
+  data
+ })
+}
+
+// 提交查重文件
+export function uploadCheckRepeatInfo(data) {
+ return request({
+  url: '/treatise_manager/courseuser/dissertation/backend/admin/admins/checkrepeat',
+  method: 'post',
+  data
+ })
+}
+
+export function uploadFile(data) {
+ return request({
+   url: '/treatise_manager/coursemanager/upload/file',
+   method: 'post',
+   data
+ })
+}
+

@@ -1,5 +1,12 @@
 <template>
   <div class="participant_wrap">
+    <input
+      type="file"
+      style="display: none"
+      ref="chooseFile"
+      @change="checkRepeatFileChange"
+      v-if="showFileInput"
+    />
     <div class="page-table">
       <div class="table_search_wrap">
         <div class="search_box_wrap">
@@ -73,7 +80,11 @@
           </div>
         </div>
         <div class="search_input_wrap">
-          <el-input placeholder="请输入姓名或学号或竞赛名称" v-model="name" size="small">
+          <el-input
+            placeholder="请输入姓名或学号或竞赛名称"
+            v-model="name"
+            size="small"
+          >
             <el-button
               slot="append"
               icon="el-icon-search"
@@ -103,27 +114,35 @@
         <el-table-column prop="proviceName" label="竞赛地区"></el-table-column>
         <template v-if="type === 2">
           <el-table-column prop="_score" label="分数"></el-table-column>
-          <el-table-column
-            prop="fileData"
-            label="视频名称"
-          ></el-table-column>
-          <el-table-column
-            prop="fileData"
-            label="视频介绍"
-          ></el-table-column>
+          <el-table-column prop="fileData" label="视频名称"></el-table-column>
+          <el-table-column prop="fileData" label="视频介绍"></el-table-column>
         </template>
         <template v-else>
-          <el-table-column prop="fileData" label="论文"></el-table-column>
+          <!-- <el-table-column prop="fileData" label="论文"></el-table-column> -->
+          <el-table-column prop="fileData" label="论文名">
+            <template slot-scope="scope">
+              <span>
+                {{ scope.row.fileData[0] && scope.row.fileData[0].fileName }}
+              </span>
+            </template>
+          </el-table-column>
           <el-table-column prop="checkName" label="查重文件"></el-table-column>
           <el-table-column prop="_score" label="分数"></el-table-column>
         </template>
-        <el-table-column label="操作" width="160">
+        <el-table-column label="操作" width="220">
           <template slot-scope="scope">
-            <el-button size="mini" @click="edit(scope.row)" v-if="type === 1"
+            <el-button
+              size="mini"
+              @click="upload(scope.row)"
+              v-if="type === 1"
+              :disabled="!scope.row.canUpload"
               >上传</el-button
             >
 
-            <el-button size="mini" @click="edit(scope.row)">下载</el-button>
+            <el-button size="mini" @click="edit(scope.row)" v-if="type === 1"
+              >修改</el-button
+            >
+            <el-button size="mini" @click="download(scope.row)">下载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -144,12 +163,18 @@
   </div>
 </template>
 <script>
-import { getStudentList, getTeacherList } from "@/api/account";
+import {
+  getStudentList,
+  getTeacherList,
+  uploadCheckRepeatInfo,
+  uploadFile,
+} from "@/api/account";
 import { getOrgs } from "@/api/competition";
 import dayjs from "dayjs";
 export default {
   data() {
     return {
+      showFileInput: true,
       pageNum: 1,
       pageSize: 10,
       totalNum: 0,
@@ -196,6 +221,7 @@ export default {
           getList: getTeacherList,
         },
       },
+      rowData: null,
     };
   },
   computed: {
@@ -259,10 +285,11 @@ export default {
       if (res.code === 1) {
         res.data.contents.map((competitionItem) => {
           let itemInfo = {
+            canUpload: false,
             ...competitionItem,
           };
-          if(itemInfo.score===-255){
-            itemInfo._score = ''
+          if (itemInfo.score === -255) {
+            itemInfo._score = "";
           }
           switch (itemInfo.type) {
             case 1:
@@ -272,16 +299,22 @@ export default {
               itemInfo.typeStr = "优选视频";
               break;
           }
-          switch (itemInfo.dissData.matchType) {
-            case 1:
-              itemInfo.matchTypeStr = "国赛";
-              break;
-            case 2:
-              itemInfo.matchTypeStr = "省赛";
-              break;
-            case 3:
-              itemInfo.matchTypeStr = "校赛";
-              break;
+          if (itemInfo.dissData) {
+            switch (itemInfo.dissData.matchType) {
+              case 1:
+                itemInfo.matchTypeStr = "国赛";
+                break;
+              case 2:
+                itemInfo.matchTypeStr = "省赛";
+                break;
+              case 3:
+                itemInfo.matchTypeStr = "校赛";
+                break;
+            }
+          }
+          // 学生已上传答辩论文
+          if (itemInfo.fileData[0] && itemInfo.fileData[0].filePath) {
+            itemInfo.canUpload = true;
           }
           itemInfo.timePeriod = `${this.dateToISO(
             +itemInfo.startTime
@@ -303,10 +336,67 @@ export default {
       this.updateTableData();
       // console.log(currentPage, 'handleCurrentChange')
     },
+    upload(rowData) {
+      this.rowData = rowData;
+      this.$refs.chooseFile.click();
+    },
+    async checkRepeatFileChange() {
+      let fileEl = this.$refs.chooseFile;
+      // console.log(fileEl, fileEl.files[0]);
+
+      let file = fileEl.files[0];
+      this.showFileInput = false;
+      // console.log("this.showFileInput = false");
+      let formData = new FormData();
+      formData.append("file", file);
+      try {
+        let fileUploadRes = await uploadFile(formData);
+
+        if (fileUploadRes.code === 1) {
+          let fileNames = file.name.split(".");
+          fileNames.pop();
+          let checkRepeatInfo = {
+            path: fileUploadRes.data,
+            userId: this.rowData.userId,
+            name: fileNames.join("."),
+          };
+          let uploadCheckRepeatInfoRes = await uploadCheckRepeatInfo(
+            checkRepeatInfo
+          );
+          if (uploadCheckRepeatInfoRes.code === 1) {
+            this.$message({
+              type: "success",
+              message: `已为学生：${this.rowData.name}添加查重文件`,
+              duration: 3000,
+            });
+            this.updateTableData()
+          } else {
+            this.$message({
+              type: "error",
+              message: res.message,
+              duration: 3000,
+            });
+          }
+          console.log(uploadCheckRepeatInfoRes);
+        } else {
+          // console.log(fileUploadRes, fileUploadRes.message);
+          this.$message({
+            message: `[code-${fileUploadRes.status}]:${
+              JSON.parse(fileUploadRes.message).message
+            }`,
+            type: "error",
+            duration: 5 * 1000,
+          });
+        }
+      } catch (error) {}
+      this.showFileInput = true;
+      // console.log("this.showFileInput = true");
+    },
+    download(rowData) {},
     edit(rowData) {
-      sessionStorage.setItem("competitionInfo", JSON.stringify(rowData));
+      sessionStorage.setItem("userInfo", JSON.stringify(rowData));
       this.$router.push({
-        path: `/competition/edit/${rowData.id}`,
+        path: `/account/participant/edit/${rowData.userId}`,
       });
       console.log(rowData);
     },
