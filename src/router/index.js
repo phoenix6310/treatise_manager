@@ -41,7 +41,7 @@ export const asyncRouterMap = [{
     redirect: '/competition/rules',
     meta: {
       title: '竞赛',
-      roles: [10001]
+      roles: [10001,9002,9003]
     },
     children: [{
       path: '/competition/rules',
@@ -86,14 +86,14 @@ export const asyncRouterMap = [{
     redirect: '/account/participant',
     meta: {
       title: '人员管理',
-      roles: [10001]
+      roles: [10001,9002,9003]
     },
     children: [{
       path: '/account/participant',
       component: () => import('@/views/account/participant'),
       name: 'participant',
       meta: {
-        title: '选手信息',
+        title: '答辩选手',
       }
     },{
       path: '/account/participant/edit/:id',
@@ -108,7 +108,7 @@ export const asyncRouterMap = [{
       component: () => import('@/views/account/reviewer'),
       name: 'reviewer',
       meta: {
-        title: '评审信息',
+        title: '评委信息',
       }
     }, {
       path: '/account/manager',

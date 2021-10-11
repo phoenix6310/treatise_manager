@@ -113,9 +113,21 @@
         <el-table-column prop="collegeName" label="院校"></el-table-column>
         <el-table-column prop="proviceName" label="竞赛地区"></el-table-column>
         <template v-if="type === 2">
-          <el-table-column prop="_score" label="分数"></el-table-column>
-          <el-table-column prop="fileData" label="视频名称"></el-table-column>
-          <el-table-column prop="fileData" label="视频介绍"></el-table-column>
+          <el-table-column prop="$score" label="总评分" key="$score"></el-table-column>
+          <el-table-column label="视频名称">
+            <template slot-scope="scope">
+              <span>
+                {{ scope.row.fileData[0] && scope.row.fileData[0].fileName }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="视频介绍">
+            <template slot-scope="scope">
+              <span>
+                {{ scope.row.fileData[0] && scope.row.fileData[0].fileInfo }}
+              </span>
+            </template>
+          </el-table-column>
         </template>
         <template v-else>
           <!-- <el-table-column prop="fileData" label="论文"></el-table-column> -->
@@ -127,7 +139,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="checkName" label="查重文件"></el-table-column>
-          <el-table-column prop="_score" label="分数"></el-table-column>
+          <el-table-column prop="$score" label="总评分"></el-table-column>
         </template>
         <el-table-column label="操作" width="220">
           <template slot-scope="scope">
@@ -289,8 +301,12 @@ export default {
             ...competitionItem,
           };
           if (itemInfo.score === -255) {
-            itemInfo._score = "";
+            itemInfo.$score = "";
+          }else{
+            itemInfo.$score === itemInfo.score
           }
+          // itemInfo.$score = 100;
+          console.log(itemInfo.score, 'itemInfo.score')
           switch (itemInfo.type) {
             case 1:
               itemInfo.typeStr = "主观题答辩";

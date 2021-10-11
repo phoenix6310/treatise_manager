@@ -18,7 +18,7 @@ export function getTeacherList(data) {
 
 export function getReviewerList(data) {
  return request({
-  url: '/treatise_manager/courseuser/dissertation/backend/admin/user/getTeachers',
+  url: '/treatise_manager/courseuser/dissertation/backend/admin/reviewer/getReviewers',
   method: 'post',
   data
  })

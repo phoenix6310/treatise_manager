@@ -220,7 +220,7 @@ export default {
           let itemInfo = {
             ...competitionItem,
           };
-          switch (itemInfo.dissData.type) {
+          switch (itemInfo.dissData&&itemInfo.dissData.type) {
             case 1:
               itemInfo.typeStr = "主观题答辩";
               break;
@@ -228,7 +228,7 @@ export default {
               itemInfo.typeStr = "优选视频";
               break;
           }
-          switch (itemInfo.dissData.matchType) {
+          switch (itemInfo.dissData&&itemInfo.dissData.matchType) {
             case 1:
               itemInfo.matchTypeStr = "国赛";
               break;

@@ -1,6 +1,8 @@
 'use strict'
 const path = require('path')
 const NODE_ENV = process.env.NODE_ENV
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 let prodPlugins = []
 if (NODE_ENV === 'production') {
   // 去掉console
@@ -16,7 +18,6 @@ if (NODE_ENV === 'production') {
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
   publicPath: process.env.VUE_APP_PUBLIC_PATH,
   devServer: {
@@ -28,8 +29,8 @@ module.exports = {
     proxy: {
       'treatise_manager': {
         // target: 'http://172.18.84.42:7006',
-        // target: 'http://172.18.84.81',
-        target: 'http://f3176v6414.zicp.vip',
+        target: 'http://172.18.84.81:7006',
+        // target: 'http://f3176v6414.zicp.vip',
         pathRewrite: {
           '^/treatise_manager': '',
           changeOrigin: true

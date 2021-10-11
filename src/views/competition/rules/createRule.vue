@@ -124,7 +124,7 @@ export default {
             children: [
               {
                 name: "",
-                score: 0,
+                score: "",
                 info: "",
               },
               //   {
@@ -214,7 +214,7 @@ export default {
             } else {
               itemInfo.children.push({
                 name: "",
-                score: 0,
+                score: "",
                 info: "",
               });
             }
@@ -260,7 +260,7 @@ export default {
           children: [
             {
               name: "",
-              score: 0,
+              score: "",
               info: "",
             },
           ],
@@ -269,7 +269,7 @@ export default {
         // 二级指标的增加
         this.ruleForm.rule[parentIndex].children.push({
           name: "",
-          score: 0,
+          score: "",
           info: "",
         });
       }
