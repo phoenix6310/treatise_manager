@@ -113,7 +113,11 @@
         <el-table-column prop="collegeName" label="院校"></el-table-column>
         <el-table-column prop="proviceName" label="竞赛地区"></el-table-column>
         <template v-if="type === 2">
-          <el-table-column prop="$score" label="总评分" key="$score"></el-table-column>
+          <el-table-column
+            prop="$score"
+            label="总评分"
+            key="$score"
+          ></el-table-column>
           <el-table-column label="视频名称">
             <template slot-scope="scope">
               <span>
@@ -151,9 +155,12 @@
               >上传</el-button
             >
 
-            <el-button size="mini" @click="edit(scope.row)" v-if="type === 1"
+            <!-- <el-button size="mini" @click="edit(scope.row)" v-if="type === 1"
               >修改</el-button
-            >
+            > -->
+            <!-- <el-button size="mini" @click="resetPwd(scope.row)"
+              >重置密码</el-button
+            > -->
             <el-button size="mini" @click="download(scope.row)">下载</el-button>
           </template>
         </el-table-column>
@@ -302,11 +309,11 @@ export default {
           };
           if (itemInfo.score === -255) {
             itemInfo.$score = "";
-          }else{
-            itemInfo.$score === itemInfo.score
+          } else {
+            itemInfo.$score === itemInfo.score;
           }
           // itemInfo.$score = 100;
-          console.log(itemInfo.score, 'itemInfo.score')
+          console.log(itemInfo.score, "itemInfo.score");
           switch (itemInfo.type) {
             case 1:
               itemInfo.typeStr = "主观题答辩";
@@ -385,7 +392,7 @@ export default {
               message: `已为学生：${this.rowData.name}添加查重文件`,
               duration: 3000,
             });
-            this.updateTableData()
+            this.updateTableData();
           } else {
             this.$message({
               type: "error",
@@ -436,5 +443,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .participant_wrap {
+}
+</style>
+
+<style lang="scss">
+.participant_wrap {
+  .cell {
+    text-align: left;
+    .el-button--mini {
+      margin-bottom: 10px;
+      margin-right: 6px;
+    }
+    .el-button + .el-button {
+      margin-left: 0;
+    }
+  }
 }
 </style>

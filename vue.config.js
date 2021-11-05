@@ -31,6 +31,7 @@ module.exports = {
         // target: 'http://172.18.84.42:7006',
         target: 'http://172.18.84.81:7006',
         // target: 'http://f3176v6414.zicp.vip',
+        // target: 'http://scc.apabi.cn/',
         pathRewrite: {
           '^/treatise_manager': '',
           changeOrigin: true
@@ -45,7 +46,7 @@ module.exports = {
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
-    name: '答辩',
+    name: '答辩平台管理端',
     resolve: {
       alias: {
         '@': resolve('src'),
@@ -55,4 +56,5 @@ module.exports = {
       ...prodPlugins,
     ],
   },
+  outputDir: 'E:\\pengjie20190321\\project\\OnlineCourseWeb\\dist\\db_manager'
 }

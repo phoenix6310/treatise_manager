@@ -35,7 +35,7 @@ export default {
   height: 60px;
   line-height: 50px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
-  background-color: #6164ff;
+  background-color: #03a9f4;
   color: #ffffff;
   .bar-logo {
     float: left;

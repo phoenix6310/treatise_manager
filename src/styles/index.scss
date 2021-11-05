@@ -1,40 +1,52 @@
 @import 'variables.scss';
 
 @import './sidebar.scss';
+// @import './element-ui.scss';
 
-html, body{
+html,
+body {
     height: 100%;
 }
 
-.page-header{
+
+
+.page-header {
     margin-bottom: 10px;
 }
+
 .page-table {
-    .table_search_wrap{
+    .table_search_wrap {
         margin-bottom: 10px;
         display: flex;
         justify-content: space-between;
-        .search_box_wrap{
+
+        .search_box_wrap {
             display: flex;
-            .search_box{
+
+            .search_box {
                 display: flex;
                 align-items: center;
                 margin-right: 10px;
-                .search_title{
+
+                .search_title {
                     margin-right: 6px;
                 }
-                .w100{
+
+                .w100 {
                     width: 100px;
                 }
-                .w120{
+
+                .w120 {
                     width: 120px;
                 }
             }
         }
     }
+
     .cell {
         text-align: center;
     }
+
     .page-footer {
         margin-top: 10px;
         margin-bottom: 20px;
@@ -43,7 +55,7 @@ html, body{
     }
 }
 
-ul{
+ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -52,4 +64,8 @@ ul{
 .form_inline {
     display: inline-block;
     width: 340px;
-  }
+}
+
+.el-table .el-table__cell {
+    padding: 4px;
+}

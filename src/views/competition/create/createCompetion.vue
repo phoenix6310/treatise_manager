@@ -79,7 +79,7 @@
       <el-form-item label="提交截止时间" prop="uploadTime" class="form_inline">
         <el-date-picker
           v-model="competitionForm.uploadTime"
-          type="date"
+          type="datetime"
           placeholder="选择日期"
           value-format="timestamp"
           :disabled="isEdit"
@@ -101,7 +101,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="选手题目" prop="subject">
+      <el-form-item label="选手题目" prop="subject">
         <el-input
           v-model="competitionForm.subject"
           size="small"
@@ -109,7 +109,7 @@
           maxlength="100"
           :autosize="{ minRows: 2, maxRows: 4 }"
         ></el-input>
-      </el-form-item> -->
+      </el-form-item>
 
       <el-form-item label="盲审" prop="isBlind" class="form_inline">
         <el-switch v-model="competitionForm.isBlind"> </el-switch>
@@ -124,9 +124,12 @@
           ref="contestantsInfo"
           @change="fileChange('contestantsInfo')"
         />
+
+        <span class="download_temp" @click="downloadTemp(1)">下载模板</span>
       </el-form-item>
       <el-form-item label="评委信息">
         <input type="file" ref="reviewers" @change="fileChange('reviewers')" />
+        <span class="download_temp" @click="downloadTemp(3)">下载模板</span>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -194,7 +197,7 @@ export default {
         matchType: 2,
         name: "",
         // 选手题目
-        // subject: "",
+        subject: "",
         // 年份
         term: "",
         // 竞赛时间
@@ -289,7 +292,7 @@ export default {
           matchType: competitionInfo.matchType,
           name: competitionInfo.name,
           // 选手题目
-          // subject: competitionInfo.subject,
+          subject: competitionInfo.subject,
           // 年份
           term: competitionInfo.term,
           // 竞赛时间
@@ -308,6 +311,26 @@ export default {
     }
   },
   methods: {
+    downloadTemp(type) {
+      if (type === 1) {
+        if (this.competitionForm.type === 1) {
+          type = 1;
+        } else if (this.competitionForm.type === 2) {
+          type = 2;
+        }
+      }
+      console.log(type)
+      // return;
+      let pathInfo = {
+        // 学生
+        1: "http://xxsyimg.apabi.com/group1/M00/00/62/wKgUFmFyjqeAfFypAAArhfTn4pc46.xlsx",
+        // 教师
+        2: "http://xxsyimg.apabi.com/group1/M00/00/62/wKgUFmFyhW6ACm_gAAAvTYZBwB476.xlsx",
+        // 评委（专家）
+        3: "http://xxsyimg.apabi.com/group1/M00/00/62/wKgUF2FyhTeAZ0oQAAAvcpxmDE850.xlsx",
+      };
+      window.open(pathInfo[type]);
+    },
     fileChange(fileRef) {
       console.log(this.$refs[fileRef].files[0]);
       this.files[fileRef] = this.$refs[fileRef].files[0];
@@ -408,5 +431,15 @@ export default {
 .form_inline {
   display: inline-block;
   width: 340px;
+}
+
+.create_competition_wrap {
+  .download_temp {
+    color: #fff;
+    padding: 6px 12px;
+    background-color: #409eff;
+    border-radius: 6px;
+    cursor: pointer;
+  }
 }
 </style>

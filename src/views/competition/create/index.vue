@@ -21,7 +21,13 @@
           </div>
           <div class="search_box">
             <div class="search_title">类型</div>
-            <el-select v-model="type" placeholder="请选择" size="small" class="w120" @change="updateQuery">
+            <el-select
+              v-model="type"
+              placeholder="请选择"
+              size="small"
+              class="w120"
+              @change="updateQuery"
+            >
               <el-option
                 v-for="item in competitionTypes"
                 :key="item.value"
@@ -33,7 +39,13 @@
           </div>
           <div class="search_box">
             <div class="search_title">规模</div>
-            <el-select v-model="matchType" placeholder="请选择" size="small" class="w120" @change="updateQuery">
+            <el-select
+              v-model="matchType"
+              placeholder="请选择"
+              size="small"
+              class="w120"
+              @change="updateQuery"
+            >
               <el-option
                 v-for="item in competitionScope"
                 :key="item.value"
@@ -222,20 +234,32 @@ export default {
       });
       console.log(rowData);
     },
-    async del(rowData) {
+    del(rowData) {
       console.log(rowData);
-
-      const formData = new FormData();
-      formData.append("ids", rowData.id);
-      let res = await delCompetition(formData);
-      if (res && res.code === 1) {
-        this.$message({
-          type: "success",
-          message: "已删除",
-          duration: 3000,
+      this.$confirm(`确认删除竞赛【${rowData.name}】吗?`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const formData = new FormData();
+          formData.append("ids", rowData.id);
+          let res = await delCompetition(formData);
+          if (res && res.code === 1) {
+            this.$message({
+              type: "success",
+              message: "删除成功",
+              duration: 3000,
+            });
+            this.updateTableData();
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
         });
-        this.updateTableData();
-      }
     },
   },
 };
