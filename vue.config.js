@@ -31,6 +31,7 @@ module.exports = {
         // target: 'http://172.18.84.42:7006',
         target: 'http://172.18.84.81:7006',
         // target: 'http://f3176v6414.zicp.vip',
+        target: 'http://4s455471z1.qicp.vip',
         // target: 'http://scc.apabi.cn/',
         pathRewrite: {
           '^/treatise_manager': '',
