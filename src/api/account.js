@@ -105,3 +105,11 @@ export function setStudentsForReviewer(data) {
   })
 }
 
+// 获取成绩
+export function rankList(data) {
+  return request({
+    url: '/treatise_manager/courseuser/dissertation/backend/admin/user/query/rankList',
+    method: 'post',
+    data
+  })
+}
