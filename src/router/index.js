@@ -111,6 +111,13 @@ export const asyncRouterMap = [{
         title: '评委信息',
       }
     }, {
+      path: '/account/assign',
+      component: () => import('@/views/account/reviewer/assign'),
+      name: 'reviewer',
+      meta: {
+        title: '指派管理',
+      }
+    }, {
       path: '/account/manager',
       component: () => import('@/views/account/manager'),
       name: 'manager',
