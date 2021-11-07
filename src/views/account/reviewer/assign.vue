@@ -145,6 +145,7 @@ import {
   getReviewerList,
   resetPwd,
   getStudentList,
+  getTeacherList,
   getReviewerInfo,
   setStudentsForReviewer,
 } from "@/api/account";
@@ -273,16 +274,19 @@ export default {
       }
       this.transferValue = assignedStudent;
       // 获取待指派学生
-      let studentListRes = await getStudentList(params);
+      
+      let searchFn = this.type===1?getStudentList:getTeacherList
+      
+      let studentListRes = await searchFn(params);
       let studentList = [];
       if (studentListRes.code === 1) {
         studentListRes.data.contents.map((student) => {
-          if (assignedStudent.indexOf(student.userId) === -1) {
+          // if (assignedStudent.indexOf(student.userId) === -1) {
             studentList.push({
               key: student.userId,
               label: student.name,
             });
-          }
+          // }
         });
       }
       this.transferData = studentList;
