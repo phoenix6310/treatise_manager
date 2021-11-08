@@ -97,11 +97,8 @@
         <el-table-column prop="typeStr" label="评审类型"></el-table-column>
         <el-table-column label="操作" width="160">
           <template slot-scope="scope">
-            <el-button size="mini" @click="resetPwd(scope.row)"
-              >重置密码</el-button
-            >
-            <el-button size="mini" @click="download"
-              >下载</el-button
+            <el-button size="mini" @click="openAssignPlayerDlg(scope.row)"
+              >指派</el-button
             >
           </template>
         </el-table-column>
@@ -120,15 +117,46 @@
         </div>
       </div>
     </div>
+
+    <!--  指派弹窗 -->
+    <el-dialog
+      title="指派"
+      :visible.sync="dialogVisible"
+      width="800px"
+      :before-close="handleClose"
+    >
+      <el-transfer
+        filterable
+        :titles="['待指派', '已指派']"
+        filter-placeholder="请输入姓名"
+        v-model="transferValue"
+        :data="transferData"
+      >
+      </el-transfer>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmChange">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getReviewerList, resetPwd } from "@/api/account";
+import {
+  getReviewerList,
+  resetPwd,
+  getStudentList,
+  getTeacherList,
+  getReviewerInfo,
+  setStudentsForReviewer,
+} from "@/api/account";
 import { getOrgs } from "@/api/competition";
 import dayjs from "dayjs";
 export default {
   data() {
     return {
+      transferValue: [],
+      transferData: [],
+      dialogVisible: false,
       pageNum: 1,
       pageSize: 10,
       totalNum: 0,
@@ -167,6 +195,7 @@ export default {
       ],
       proviceId: "",
       provinceOptions: [],
+      selectedRow: null,
     };
   },
   async created() {
@@ -186,21 +215,82 @@ export default {
     this.provinceOptions = provinceOptions;
   },
   methods: {
-    download(){
-      let url = 'http://1258658963.vod2.myqcloud.com/f985123fvodtranscq1258658963/9d106bf18602268011500693300/v.f30.mp4'
-      var xhr = new XMLHttpRequest()
-      xhr.onreadystatechange = function(){
-        if(this.readyState===4&&this.status===200){
-          let res = this.response;
-          let URL = window.URL || window.webkitURL
-          let blobUrl = URL.createObjectURL(res)
-          window.location = blobUrl
-          // const a = document.createElement('a')
-        }
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
+    async confirmChange() {
+      if (!this.transferValue.length) {
+        this.$message({
+          type: "error",
+          message: "请选择学生",
+          duration: 3000,
+        });
+        return;
       }
-      xhr.open('get',url)
-      xhr.responseType = 'blob'
-      xhr.send()
+      let data = {
+        reviewerId: this.selectedRow.userId,
+        dissId: this.selectedRow.dissId,
+        userList: [],
+      };
+      this.transferValue.map((userId) => {
+        data.userList.push({ userId });
+      });
+      let res = await setStudentsForReviewer(data);
+      if (res.code === 1) {
+        this.$message({
+          type: "success",
+          message: "已成功指派",
+          duration: 3000,
+        });
+        this.dialogVisible = false;
+      }
+    },
+    async openAssignPlayerDlg(rowData) {
+      this.selectedRow = rowData;
+      this.dialogVisible = true;
+      console.log(rowData);
+
+      let params = {
+        pageNum: 1,
+        pageSize: 999999,
+        columnFilters: {
+          type: this.type,
+        },
+      };
+      // 获取已指派学生
+      let assignedStudent = [];
+      let assignedStudentParams = new FormData();
+      assignedStudentParams.append("reviewerId", rowData.userId);
+      let assignedStudentRes = await getReviewerInfo(assignedStudentParams);
+      console.log(assignedStudentRes, "assignedStudent");
+      if (assignedStudentRes.code === 1) {
+        assignedStudentRes.data.map((item) => {
+          assignedStudent.push(item.userId);
+        });
+      }
+      this.transferValue = assignedStudent;
+      // 获取待指派学生
+      
+      let searchFn = this.type===1?getStudentList:getTeacherList
+      
+      let studentListRes = await searchFn(params);
+      let studentList = [];
+      if (studentListRes.code === 1) {
+        studentListRes.data.contents.map((student) => {
+          // if (assignedStudent.indexOf(student.userId) === -1) {
+            studentList.push({
+              key: student.userId,
+              label: student.name,
+            });
+          // }
+        });
+      }
+      this.transferData = studentList;
+      console.log(studentList, "studentList");
     },
     async resetPwd(rowData) {
       let res = await resetPwd({

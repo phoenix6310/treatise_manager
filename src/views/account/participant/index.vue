@@ -161,6 +161,9 @@
             <!-- <el-button size="mini" @click="resetPwd(scope.row)"
               >重置密码</el-button
             > -->
+            <el-button size="mini" @click="resetPwd(scope.row)"
+              >重置密码</el-button
+            >
             <el-button size="mini" @click="download(scope.row)">下载</el-button>
           </template>
         </el-table-column>
@@ -187,6 +190,7 @@ import {
   getTeacherList,
   uploadCheckRepeatInfo,
   uploadFile,
+  resetPwd,
 } from "@/api/account";
 import { getOrgs } from "@/api/competition";
 import dayjs from "dayjs";
@@ -271,6 +275,25 @@ export default {
     this.provinceOptions = provinceOptions;
   },
   methods: {
+    async resetPwd(rowData) {
+      let res = await resetPwd({
+        userId: rowData.userId,
+      });
+      console.log(rowData.userId, res);
+      if (res.code === 1) {
+        this.$message({
+          type: "success",
+          message: "已重置",
+          duration: 3000,
+        });
+      } else {
+        this.$message({
+          type: "error",
+          message: "请重试",
+          duration: 3000,
+        });
+      }
+    },
     updateQuery() {
       this.updateTableData();
     },
@@ -446,17 +469,4 @@ export default {
 }
 </style>
 
-<style lang="scss">
-.participant_wrap {
-  .cell {
-    text-align: left;
-    .el-button--mini {
-      margin-bottom: 10px;
-      margin-right: 6px;
-    }
-    .el-button + .el-button {
-      margin-left: 0;
-    }
-  }
-}
-</style>
+

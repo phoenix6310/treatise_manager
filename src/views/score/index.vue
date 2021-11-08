@@ -89,22 +89,12 @@
         style="width: 100%"
       >
         <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="userName" label="姓名"></el-table-column>
         <el-table-column prop="userNo" label="编号"></el-table-column>
-        <el-table-column prop="term" label="竞赛年份"></el-table-column>
-        <el-table-column prop="matchTypeStr" label="竞赛规模"></el-table-column>
+        <el-table-column prop="collegeName" label="学校"></el-table-column>
         <el-table-column prop="proviceName" label="竞赛地区"></el-table-column>
-        <el-table-column prop="typeStr" label="评审类型"></el-table-column>
-        <el-table-column label="操作" width="160">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="resetPwd(scope.row)"
-              >重置密码</el-button
-            >
-            <el-button size="mini" @click="download"
-              >下载</el-button
-            >
-          </template>
-        </el-table-column>
+        <el-table-column prop="totalScore" label="分数"></el-table-column>
+        <el-table-column prop="rank" label="排名"></el-table-column>
       </el-table>
       <div class="page-footer" v-show="tableData.length">
         <div class="block">
@@ -120,10 +110,13 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 <script>
-import { getReviewerList, resetPwd } from "@/api/account";
+import {
+  rankList,
+} from "@/api/account";
 import { getOrgs } from "@/api/competition";
 import dayjs from "dayjs";
 export default {
@@ -167,6 +160,7 @@ export default {
       ],
       proviceId: "",
       provinceOptions: [],
+      selectedRow: null,
     };
   },
   async created() {
@@ -186,41 +180,6 @@ export default {
     this.provinceOptions = provinceOptions;
   },
   methods: {
-    download(){
-      let url = 'http://1258658963.vod2.myqcloud.com/f985123fvodtranscq1258658963/9d106bf18602268011500693300/v.f30.mp4'
-      var xhr = new XMLHttpRequest()
-      xhr.onreadystatechange = function(){
-        if(this.readyState===4&&this.status===200){
-          let res = this.response;
-          let URL = window.URL || window.webkitURL
-          let blobUrl = URL.createObjectURL(res)
-          window.location = blobUrl
-          // const a = document.createElement('a')
-        }
-      }
-      xhr.open('get',url)
-      xhr.responseType = 'blob'
-      xhr.send()
-    },
-    async resetPwd(rowData) {
-      let res = await resetPwd({
-        userId: rowData.userId,
-      });
-      console.log(rowData.userId, res);
-      if (res.code === 1) {
-        this.$message({
-          type: "success",
-          message: "已重置",
-          duration: 3000,
-        });
-      } else {
-        this.$message({
-          type: "error",
-          message: "请重试",
-          duration: 3000,
-        });
-      }
-    },
     updateQuery() {
       this.updateTableData();
     },
@@ -249,7 +208,7 @@ export default {
       };
 
       let list = [];
-      let res = await getReviewerList(params);
+      let res = await rankList(params);
       console.log(res);
       if (res.code === 1) {
         res.data.contents.map((competitionItem) => {

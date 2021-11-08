@@ -69,3 +69,16 @@ ul {
 .el-table .el-table__cell {
     padding: 4px;
 }
+// 表格中操作按钮
+.participant_wrap {
+  .cell {
+    text-align: left;
+    .el-button--mini {
+      margin-bottom: 10px;
+      margin-right: 6px;
+    }
+    .el-button + .el-button {
+      margin-left: 0;
+    }
+  }
+}

@@ -111,6 +111,16 @@
         ></el-input>
       </el-form-item>
 
+      <el-form-item label="竞赛规则" prop="rule">
+        <el-input
+          v-model="competitionForm.rule"
+          size="small"
+          type="textarea"
+          maxlength="100"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+        ></el-input>
+      </el-form-item>
+
       <el-form-item label="盲审" prop="isBlind" class="form_inline">
         <el-switch v-model="competitionForm.isBlind"> </el-switch>
       </el-form-item>
@@ -198,6 +208,8 @@ export default {
         name: "",
         // 选手题目
         subject: "",
+        // 竞赛规则
+        rule: '',
         // 年份
         term: "",
         // 竞赛时间
@@ -293,6 +305,7 @@ export default {
           name: competitionInfo.name,
           // 选手题目
           subject: competitionInfo.subject,
+          rule: competitionInfo.rule,
           // 年份
           term: competitionInfo.term,
           // 竞赛时间
