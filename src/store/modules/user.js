@@ -46,13 +46,18 @@ const user = {
             state
         }) {
             return new Promise(async (resolve, reject) => {
-                let {
-                    data: userData
-                } = await getInfo()
-                // console.log(userData, 'GetInfo')
-                commit('SET_ROLES', [userData.userType])
-                commit('SET_USERDATA', userData)
-                resolve(userData)
+                try {
+                    let {
+                        data: userData
+                    } = await getInfo()
+                    // console.log(userData, 'GetInfo')
+                    commit('SET_ROLES', [userData.userType])
+                    commit('SET_USERDATA', userData)
+                    resolve(userData)
+                } catch (error) {
+                    // location.reload()
+                }
+                
             })
         },
         LogOut({
